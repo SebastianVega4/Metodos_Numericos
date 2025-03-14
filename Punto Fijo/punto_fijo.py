@@ -1,46 +1,19 @@
-import numpy as np
-import json
+import math
 
+def fun(x):
+    return x**3 - 2*x + 5
 
-def punto_fijo(gx, a, tolera, iteramax=20, vertabla=True, precision=6):
-    """
-    Método del punto fijo para encontrar la raíz de una ecuación.
-    """
-    itera = 0
-    b = gx(a)
-    tramo = abs(b - a)
+def fun_g(x):
+    return (2*x - 5)**(1/3)
 
-    resultados = []
+def punto_fijo(x, iteraciones, tolerancia):
+    x_i__1 = x 
+    for k in range(iteraciones):
+        x_i = fun_g(x_i__1)  
+        if abs(x_i - x_i__1) < tolerancia:
+            return f"Su raíz es aproximadamente: {x_i}"
+        x_i__1 = x_i
+        print(f"Iteración= {k+1}, x= {x_i}")
+    return f"Después de {iteraciones} iteraciones no se encontró una raíz, por lo tanto, diverge"
 
-    if vertabla:
-        print('Método del Punto Fijo')
-        print(f"{'Iteración':<10}{'xi':<10}{'gi':<10}{'tramo':<10}")
-        print(f"{itera:<10}{a:<10.6f}{b:<10.6f}{tramo:<10.6f}")
-
-    while tramo >= tolera and itera < iteramax:
-        a = b
-        b = gx(a)
-        tramo = abs(b - a)
-        itera += 1
-
-        resultados.append({"iteracion": itera, "xi": a, "gi": b, "tramo": tramo})
-
-        if vertabla:
-            print(f"{itera:<10}{a:<10.6f}{b:<10.6f}{tramo:<10.6f}")
-
-    if itera >= iteramax:
-        print('No converge, se alcanzó el máximo de iteraciones')
-        return json.dumps({"error": "No converge", "iteraciones": itera})
-
-    return json.dumps({"raiz": b, "iteraciones": itera, "resultados": resultados})
-
-
-# PRUEBA
-if __name__ == "__main__":
-    gx = lambda x: np.exp(-x)
-    a = 0
-    tolera = 0.001
-    iteramax = 15
-
-    respuesta = punto_fijo(gx, a, tolera, iteramax, vertabla=True)
-    print("Resultado JSON:", respuesta)
+print(punto_fijo(2, 20, 0.00001))
