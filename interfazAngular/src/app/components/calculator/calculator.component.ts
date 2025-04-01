@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-calculator',
@@ -8,6 +8,8 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class CalculatorComponent {
   operationString: string = '';
   basicOperationShape = /[-+*/]/;
+  memoryValue: number = 0;
+  isMemorySet: boolean = false;
 
   @Output() save = new EventEmitter<string>();
   @Output() close = new EventEmitter<void>();
@@ -15,8 +17,15 @@ export class CalculatorComponent {
   // Métodos de la calculadora
   writeToDisplay(value: string) {
     const displayBox = document.getElementById("displayBox") as HTMLInputElement;
-    displayBox.value += value;
-    this.operationString = displayBox.value;
+    if (displayBox.value.length < 50) { // Límite de caracteres
+      displayBox.value += value;
+      this.operationString = displayBox.value;
+    }
+  }
+
+  private scrollDisplayToEnd() {
+    const displayBox = document.getElementById("displayBox") as HTMLInputElement;
+    displayBox.scrollLeft = displayBox.scrollWidth;
   }
 
   writeMathFunction(data: string) {
@@ -54,6 +63,7 @@ export class CalculatorComponent {
 
     displayBox.value = currentValue;
     this.operationString = currentValue;
+    this.scrollDisplayToEnd();
   }
 
   writeOperatorToDisplay(operator: string) {
@@ -123,23 +133,47 @@ export class CalculatorComponent {
   }
 
   // Métodos para la memoria
+  // Implementación básica de memoria
   clearMemory() {
-    // Implementa la funcionalidad de memoria
+    this.memoryValue = 0;
+    this.isMemorySet = false;
   }
 
   readMemory() {
-    // Implementa la funcionalidad de lectura de memoria
+    if (this.isMemorySet) {
+      this.writeToDisplay(this.memoryValue.toString());
+    }
   }
 
   addToMemory() {
-    // Implementa la funcionalidad de añadir a memoria
+    try {
+      const currentValue = parseFloat(this.operationString) || 0;
+      this.memoryValue += currentValue;
+      this.isMemorySet = true;
+    } catch (e) {
+      console.error('Error adding to memory');
+    }
   }
 
   subtractFromMemory() {
-    // Implementa la funcionalidad de restar de memoria
+    try {
+      const currentValue = parseFloat(this.operationString) || 0;
+      this.memoryValue -= currentValue;
+      this.isMemorySet = true;
+    } catch (e) {
+      console.error('Error subtracting from memory');
+    }
   }
 
   saveToMemory() {
-    // Implementa la funcionalidad de guardar en memoria
+    try {
+      const currentValue = parseFloat(this.operationString);
+      if (!isNaN(currentValue)) {
+        this.memoryValue = currentValue;
+        this.isMemorySet = true;
+      }
+    } catch (e) {
+      console.error('Error saving to memory');
+    }
   }
 }
