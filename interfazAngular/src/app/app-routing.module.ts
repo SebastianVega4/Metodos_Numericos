@@ -16,6 +16,7 @@ const routes: Routes = [
   { path: 'Gauss', component:GaussSeidelComponent },
   { path: 'NewtonRaphson', component:NewtonRaphsonComponent},
   { path: 'calculator', component:CalculatorComponent },
+
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

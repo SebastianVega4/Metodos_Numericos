@@ -26,7 +26,7 @@ import { CalculatorComponent } from './components/calculator/calculator.componen
     GaussSeidelComponent,
     JacobiComponent,
     CalculatorComponent
-
+    
   ],
   imports: [
     BrowserModule,
