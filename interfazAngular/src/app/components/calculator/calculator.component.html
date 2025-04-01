@@ -9,253 +9,211 @@
 <body class="calculator-body">
 
 <main>
-  <table>
-    <tr>
-      <th colspan="5">
-        <input id="displayBox" type="text" readonly />
-      </th>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bMClear">
-          <button class="button greybutton" type="button" (click)="clearMemory()">MC</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bMRead">
-          <button class="button greybutton" type="button" (click)="readMemory()">MR</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bMAdd">
-          <button class="button greybutton" type="button" (click)="addToMemory()">M+</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bMSub">
-          <button class="button greybutton" type="button" (click)="subtractFromMemory()">M-</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bMSave">
-          <button class="button greybutton" type="button" (click)="saveToMemory()">MS</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bSquare">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('x^2')">x^2</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bNthPowerOfTenOr">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('10^x')">10^x</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bSine">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('sin(')">sin</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bCosine">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('cos(')">cos</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bTangent">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('tan(')">tan</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bCube">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('x^3')">x^3</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bInverseNumber">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('x^-1')">x^-1</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bSqrt">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('sqrt(')">sqrt</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bLogOr">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('log(')">log</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bNaturalLog">
-          <button class="button blackbutton" type="button" (click)="writeMathFunction('ln(')">ln</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bPercentage">
-          <button class="button" type="button" (click)="writeMathFunction('e')">e</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bClearDisplayCE">
-          <button class="button redbutton" type="button" (click)="clearDisplay()">CE</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bClearDisplayC">
-          <button class="button redbutton" type="button" (click)="clearDisplay()">C</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bDelete">
-          <button class="button redbutton" type="button" (click)="eraseLastInput()">Del</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bDivide">
-          <button class="button greenbutton" type="button" (click)="writeOperatorToDisplay('/')">/</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bPi">
-          <button class="button" type="button" (click)="writeMathFunction('PI')">π</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bSeven">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('7')">7</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bEight">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('8')">8</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bNine">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('9')">9</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bMultiply">
-          <button class="button greenbutton" type="button" (click)="writeOperatorToDisplay('*')">x</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bFactorial">
-          <button class="button" type="button" (click)="writeMathFunction('!')">n!</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bFour">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('4')">4</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bFive">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('5')">5</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bSix">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('6')">6</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bSubtract">
-          <button class="button greenbutton" type="button" (click)="writeOperatorToDisplay('-')">-</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bToggleSign">
-          <button class="button greenbutton" type="button" (click)="toggleSign()">(-)</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bOne">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('1')">1</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bTwo">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('2')">2</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bThree">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('3')">3</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bAdd">
-          <button class="button greenbutton" type="button" (click)="writeOperatorToDisplay('+')">+</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <div class="displaytable-cell" id="bDecimal">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('.')">.</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bZero">
-          <button class="button bluebutton" type="button" (click)="writeToDisplay('0')">0</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bOpenParen">
-          <button class="button" type="button" (click)="writeToDisplay('(')">(</button>
-        </div>
-      </td>
-      <td>
-        <div class="displaytable-cell" id="bCloseParen">
-          <button class="button" type="button" (click)="writeToDisplay(')')">)</button>
-        </div>
-      </td>
-      <td>
+  <div class="calculator-container">
+    <table>
+      <tr>
+        <th colspan="6">
+          <div class="display-container">
+            <input id="displayBox" placeholder="0" readonly type="text"/>
+            <span class="display-scroll-indicator">←→</span>
+          </div>
+        </th>
+      </tr>
+      <!-- Fila de memoria y funciones avanzadas -->
+      <tr>
+        <td>
+          <button (click)="clearMemory()" class="button greybutton">MC</button>
+        </td>
+        <td>
+          <button (click)="readMemory()" class="button greybutton">MR</button>
+        </td>
+        <td>
+          <button (click)="addToMemory()" class="button greybutton">M+</button>
+        </td>
+        <td>
+          <button (click)="subtractFromMemory()" class="button greybutton">M-</button>
+        </td>
+        <td>
+          <button (click)="saveToMemory()" class="button greybutton">MS</button>
+        </td>
+        <td>
+          <button (click)="secondFunctionMode()" class="button purplebutton">2nd</button>
+        </td>
+      </tr>
+      <!-- Fila de funciones trigonométricas e hiperbólicas -->
+      <tr>
+        <td>
+          <button (click)="writeMathFunction('sin(')" class="button blackbutton">sin</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('cos(')" class="button blackbutton">cos</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('tan(')" class="button blackbutton">tan</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('sinh(')" class="button blackbutton">sinh</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('cosh(')" class="button blackbutton">cosh</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('tanh(')" class="button blackbutton">tanh</button>
+        </td>
+      </tr>
+      <!-- Fila de funciones exponenciales y logarítmicas -->
+      <tr>
+        <td>
+          <button (click)="writeMathFunction('x^2')" class="button blackbutton">x²</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('x^3')" class="button blackbutton">x³</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('x^y')" class="button blackbutton">x^y</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('e^x')" class="button blackbutton">e^x</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('10^x')" class="button blackbutton">10^x</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('1/x')" class="button blackbutton">1/x</button>
+        </td>
+      </tr>
+      <!-- Fila de raíces y logaritmos -->
+      <tr>
+        <td>
+          <button (click)="writeMathFunction('sqrt(')" class="button blackbutton">√</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('cbrt(')" class="button blackbutton">∛</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('yroot(')" class="button blackbutton">ʸ√x</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('ln(')" class="button blackbutton">ln</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('log(')" class="button blackbutton">log</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('factorial(')" class="button blackbutton">x!</button>
+        </td>
+      </tr>
+      <!-- Fila de constantes y funciones especiales -->
+      <tr>
+        <td>
+          <button (click)="writeMathFunction('PI')" class="button darkbluebutton">π</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('E')" class="button darkbluebutton">e</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('rand(')" class="button darkbluebutton">RAND</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('abs(')" class="button darkbluebutton">|x|</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('mod(')" class="button darkbluebutton">MOD</button>
+        </td>
+        <td>
+          <button (click)="writeMathFunction('floor(')" class="button darkbluebutton">⌊x⌋</button>
+        </td>
+      </tr>
+      <!-- Fila de operaciones básicas -->
+      <tr>
+        <td>
+          <button (click)="clearDisplay()" class="button redbutton">CE</button>
+        </td>
+        <td>
+          <button (click)="clearAll()" class="button redbutton">C</button>
+        </td>
+        <td>
+          <button (click)="eraseLastInput()" class="button redbutton">DEL</button>
+        </td>
+        <td>
+          <button (click)="writeOperatorToDisplay('/')" class="button greenbutton">/</button>
+        </td>
+        <td>
+          <button (click)="writeOperatorToDisplay('*')" class="button greenbutton">×</button>
+        </td>
+        <td>
+          <button (click)="writeOperatorToDisplay('%')" class="button greenbutton">%</button>
+        </td>
+      </tr>
+      <!-- Fila de números -->
+      <tr>
+        <td>
+          <button (click)="writeToDisplay('7')" class="button bluebutton">7</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('8')" class="button bluebutton">8</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('9')" class="button bluebutton">9</button>
+        </td>
+        <td>
+          <button (click)="writeOperatorToDisplay('-')" class="button greenbutton">-</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('(')" class="button orangebutton">(</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay(')')" class="button orangebutton">)</button>
+        </td>
+      </tr>
+      <!-- Fila de números -->
+      <tr>
+        <td>
+          <button (click)="writeToDisplay('4')" class="button bluebutton">4</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('5')" class="button bluebutton">5</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('6')" class="button bluebutton">6</button>
+        </td>
+        <td>
+          <button (click)="writeOperatorToDisplay('+')" class="button greenbutton">+</button>
+        </td>
+        <td>
+          <button (click)="toggleSign()" class="button darkbluebutton">+/-</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('3.1415926535')" class="button darkbluebutton">π</button>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <button (click)="writeToDisplay('1')" class="button bluebutton">1</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('2')" class="button bluebutton">2</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('3')" class="button bluebutton">3</button>
+        </td>
+        <td>
+          <button (click)="writeToDisplay('.')" class="button greenbutton">.</button>
+        </td>
         <div class="displaytable-cell" id="bSave">
           <button class="button greybutton" type="button" (click)="saveFunctionString()">OK</button>
         </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="5">
-        <div class="displaytable-cell" id="bEquals">
-          <button class="button greenbutton" type="button" (click)="passOperationString()">=</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="5">
-        <div class="displaytable-cell" id="bMultiplyX">
-          <button class="button redbutton" type="button" (click)="writeToDisplay('x')">x</button>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="5">
-        <div class="displaytable-cell" id="bMultiplyY">
-          <button class="button redbutton" type="button" (click)="writeToDisplay('y')">y</button>
-        </div>
-      </td>
+
     </tr>
 
-
-  </table>
+      <!-- Fila final -->
+      <tr>
+      <td colspan="3"><button class="button bluebutton" (click)="writeToDisplay('0')">0</button></td>
+      <td><button class="button bluebutton" (click)="writeToDisplay('000')">000</button></td>
+      <td colspan="2"><button class="button darkbluebutton" (click)="writeToDisplay('3.1415926535')">π</button></td>
+    </tr>
+    </table>
+  </div>
 </main>
-<script src="calculator.component.ts"></script>
 </body>
 </html>

@@ -13,8 +13,6 @@ import { NewtonRaphsonComponent } from './components/newton-raphson/newton-raphs
 import { BiseccionComponent } from './components/biseccion/biseccion.component';
 import { GaussSeidelComponent } from './components/gauss-seidel/gauss-seidel.component';
 import { JacobiComponent } from './components/jacobi/jacobi.component';
-import { TrapecioComponent } from './components/trapecio/trapecio.component';
-import { SimpsonComponent } from './components/simpson/simpson.component';
 import { CalculatorComponent } from './components/calculator/calculator.component';
 
 
@@ -27,10 +25,8 @@ import { CalculatorComponent } from './components/calculator/calculator.componen
     BiseccionComponent,
     GaussSeidelComponent,
     JacobiComponent,
-    TrapecioComponent,
-    SimpsonComponent,
     CalculatorComponent
-  
+
   ],
   imports: [
     BrowserModule,

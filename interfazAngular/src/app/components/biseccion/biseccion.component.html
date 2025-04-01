@@ -3,12 +3,8 @@
     <div class="card">
       <div class="card-body text-center">
         <span class="titulo">Método de Bisección</span>
-        <p class="mt-3">
-          El método de bisección es una técnica numérica utilizada para encontrar una raíz aproximada de una función continua en un intervalo. 
-          Este método se basa en la división repetida del intervalo en dos mitades y en la evaluación de la función en los puntos medios.
-        </p>
         <p>
-          Para aplicar este método, se necesitan:
+          Se necesitan:
         </p>
         <ul class="text-start">
           <li>Una <strong>función inicial</strong> f(x).</li>
@@ -16,7 +12,7 @@
         </ul>
       </div>
     </div>
-  </div>  
+  </div>
     <div class="col-sm-5">
       <div class="card">
         <div class="card-body text-center">
@@ -30,7 +26,7 @@
                 <input type="text" formControlName="funcion" class="form-control form-control-lg" placeholder="Función" readonly>
                 <button type="button" class="btn btn-secondary" (click)="openCalculator('funcion')">🧮</button>
               </div>
-              
+
               <div class="text-danger" *ngIf="eventForm.get('funcion')?.hasError('required') && eventForm.get('funcion')?.touched">
                 <span>La función <strong> es obligatoria</strong></span>
               </div>
@@ -103,14 +99,14 @@
 <div class="modal" tabindex="-1" role="dialog" id="calculatorModal">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-     
+
       <div class="modal-body">
         <app-calculator (close)="closeCalculator()" (save)="saveFunction($event)"></app-calculator>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="closeCalculator()">Cerrar</button>
       </div>
-      
+
     </div>
   </div>
 </div>
