@@ -154,4 +154,4 @@ Facultad de Ingeniería — Ingeniería de Sistemas 🧩
 **🏫 Universidad Pedagógica y Tecnológica de Colombia**  
 📍 Sogamoso, Boyacá 📍
 
-© 2025 — Universidad Pedagógica y Tecnológica de Colombia (UPTC) 
+© 2025 — Sebastian Vega
