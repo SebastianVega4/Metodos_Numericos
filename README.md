@@ -51,7 +51,7 @@ La solución está compuesta por múltiples servicios:
 - **Docker** para el aislamiento de cada componente
 - **Docker Compose** para el despliegue automatizado de toda la solución
 
-```mermaid
+```
 graph LR
   UI[Frontend Angular (5009)]
   BISECCION[Bisección]
@@ -77,7 +77,7 @@ graph LR
 
 ## 🚀 Tecnologías Utilizadas
 
-- **Angular 15+**
+- **Angular 16+**
 - **Flask (Python)**
 - **Docker / Docker Compose**
 - **Chart.js** (visualización)
@@ -149,6 +149,9 @@ Desarrollado por **Sebastián Vega**
 🔗 [LinkedIn - Johan Sebastián Vega Ruiz](https://www.linkedin.com/in/johan-sebastian-vega-ruiz-b1292011b/)
 
 ---
+ 
+Facultad de Ingeniería — Ingeniería de Sistemas 🧩
+**🏫 Universidad Pedagógica y Tecnológica de Colombia**  
+📍 Sogamoso, Boyacá 📍
 
-© 2025 — Universidad Pedagógica y Tecnológica de Colombia (UPTC)  
-Facultad de Ingeniería — Ingeniería de Sistemas
+© 2025 — Universidad Pedagógica y Tecnológica de Colombia (UPTC) 
