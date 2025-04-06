@@ -6,6 +6,8 @@ import { SecanteComponent } from './components/secante/secante.component';
 import { JacobiComponent } from './components/jacobi/jacobi.component';
 import { NewtonRaphsonComponent } from './components/newton-raphson/newton-raphson.component';
 import { GaussSeidelComponent } from './components/gauss-seidel/gauss-seidel.component';
+import { SimpsonComponent } from './components/simpson/simpson.component';
+import { TrapecioComponent } from './components/trapecio/trapecio.component';
 import {CalculatorComponent} from "./components/calculator/calculator.component";
 
 const routes: Routes = [
@@ -15,6 +17,8 @@ const routes: Routes = [
   { path: 'Jacobi', component:JacobiComponent },
   { path: 'Gauss', component:GaussSeidelComponent },
   { path: 'NewtonRaphson', component:NewtonRaphsonComponent},
+  { path: 'Simpson', component:SimpsonComponent},
+  { path: 'Trapecio', component:TrapecioComponent },
   { path: 'calculator', component:CalculatorComponent },
 
   { path: '**', redirectTo: '', pathMatch: 'full' }
