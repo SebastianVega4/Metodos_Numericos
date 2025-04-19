@@ -1,5 +1,5 @@
 # Usa una imagen base de Node.js específica (versión 18.x.x LTS Alpine)
-FROM node:18-alpine as build
+FROM node:23-alpine as build
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /usr/src/app

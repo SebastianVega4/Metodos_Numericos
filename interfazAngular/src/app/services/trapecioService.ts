@@ -7,7 +7,7 @@ import { trapecio } from '../models/trapecio';
   providedIn: 'root'
 })
 export class trapecioService {
-  private url='http://localhost:5006/Trapecio'
+  private url='http://localhost:5006/trapecio'
 
   constructor(private http:HttpClient) { }
 

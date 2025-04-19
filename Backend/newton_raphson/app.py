@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 
 import math
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt # type: ignore
 import numpy as np
 import io
 import base64

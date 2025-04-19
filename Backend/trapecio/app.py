@@ -18,7 +18,7 @@ def metodo_trapecio(f, a, b, n):
     area = (h/2) * np.sum(y[:-1] + y[1:])
     return area, x, y
 
-@app.route('/Trapecio', methods=['POST'])
+@app.route('/trapecio', methods=['POST'])
 def solve_trapecio():
     data = request.json
     f_str = data['funcion']
