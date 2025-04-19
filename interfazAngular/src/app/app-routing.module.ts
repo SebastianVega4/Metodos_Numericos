@@ -11,14 +11,14 @@ import { TrapecioComponent } from './components/trapecio/trapecio.component';
 import {CalculatorComponent} from "./components/calculator/calculator.component";
 
 const routes: Routes = [
-  { path: 'puntoFijo', component:PuntoFijoComponent },
-  { path: 'secante', component:SecanteComponent },
-  { path: 'biseccion', component:BiseccionComponent },
-  { path: 'jacobi', component:JacobiComponent },
-  { path: 'gauss', component:GaussSeidelComponent },
-  { path: 'newtonRaphson', component:NewtonRaphsonComponent},
-  { path: 'simpson', component:SimpsonComponent},
-  { path: 'irapecio', component:TrapecioComponent },
+  { path: 'PuntoFijo', component:PuntoFijoComponent },
+  { path: 'Secante', component:SecanteComponent },
+  { path: 'Biseccion', component:BiseccionComponent },
+  { path: 'Jacobi', component:JacobiComponent },
+  { path: 'Gauss', component:GaussSeidelComponent },
+  { path: 'NewtonRaphson', component:NewtonRaphsonComponent},
+  { path: 'Simpson', component:SimpsonComponent},
+  { path: 'Trapecio', component:TrapecioComponent },
   { path: 'calculator', component:CalculatorComponent },
 
   { path: '**', redirectTo: '', pathMatch: 'full' }

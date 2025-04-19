@@ -12,7 +12,7 @@ interfazAngular/.angular/cache/
 
 .idea/
 .idx/
-.vs/
+.node_modules/
 .vscode/
 
 # Mobile Tools for Java (J2ME)
