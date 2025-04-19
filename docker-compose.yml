@@ -1,52 +1,126 @@
-version: "3.8"
+version: "4.39.0"
 services:
   newton_raphson:
-    build: ./Backend/newton_raphson
+    build: 
+      context: ./Backend/newton_raphson
+      network: host  # Solo para construcción
     ports:
       - "5000:5000"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
 
   biseccion:
-    build: ./Backend/biseccion
+    build: 
+      context: ./Backend/biseccion
+      network: host
     ports:
       - "5001:5001"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
+     # Añade esto:
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1  # Opcional: mejora tiempos de conexión
 
   secante:
-    build: ./Backend/secante
+    build: 
+      context: ./Backend/secante
+      network: host
     ports:
       - "5002:5002"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
 
   punto_fijo:
-    build: ./Backend/punto_fijo
+    build: 
+      context: ./Backend/punto_fijo
+      network: host
     ports:
       - "5003:5003"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
 
   broyden:
-    build: ./Backend/broyden
+    build: 
+      context: ./Backend/broyden
+      network: host
     ports:
       - "5004:5004"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
 
   gauss_seidel:
-    build: ./Backend/gauss_seidel
+    build: 
+      context: ./Backend/gauss_seidel
+      network: host
     ports:
       - "5005:5005"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
 
   trapecio:
-    build: ./Backend/trapecio
+    build: 
+      context: ./Backend/trapecio
+      network: host
     ports:
       - "5006:5006"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
 
   jacobi:
-    build: ./Backend/jacobi
+    build: 
+      context: ./Backend/jacobi
+      network: host
     ports:
       - "5007:5007"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
 
   simpson:
-    build: ./Backend/simpson
+    build: 
+      context: ./Backend/simpson
+      network: host
     ports:
       - "5008:5008"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - metodos_numericos_net
+
   angular-app:
     build:
       context: ./interfazAngular
       dockerfile: Dockerfile
+      network: host
     ports:
       - "5009:5009"
+    networks:
+      - metodos_numericos_net
+
+networks:
+  metodos_numericos_net:
+    driver: bridge
