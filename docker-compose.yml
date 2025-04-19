@@ -9,8 +9,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   biseccion:
     build: 
@@ -21,11 +20,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
-     # Añade esto:
-    sysctls:
-      - net.ipv6.conf.all.disable_ipv6=1  # Opcional: mejora tiempos de conexión
+    network_mode: bridge
 
   secante:
     build: 
@@ -36,8 +31,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   punto_fijo:
     build: 
@@ -48,8 +42,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   broyden:
     build: 
@@ -60,8 +53,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   gauss_seidel:
     build: 
@@ -72,8 +64,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   trapecio:
     build: 
@@ -84,8 +75,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   jacobi:
     build: 
@@ -96,8 +86,7 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   simpson:
     build: 
@@ -108,19 +97,15 @@ services:
     dns:
       - 8.8.8.8
       - 1.1.1.1
-    networks:
-      - metodos_numericos_net
+    network_mode: bridge
 
   angular-app:
     build:
       context: ./interfazAngular
       dockerfile: Dockerfile
       network: host
+      args:
+        ALPINE_MIRROR: mirrors.aliyun.com  # Usar mirror alternativo
     ports:
       - "5009:5009"
-    networks:
-      - metodos_numericos_net
-
-networks:
-  metodos_numericos_net:
-    driver: bridge
+    network_mode: bridge

@@ -3,6 +3,10 @@ FROM node:20-alpine3.19 as build
 
 WORKDIR /usr/src/app
 
+# Usar mirror alternativo para apk
+RUN echo "https://mirrors.aliyun.com/alpine/v3.19/main" > /etc/apk/repositories && \
+    echo "https://mirrors.aliyun.com/alpine/v3.19/community" >> /etc/apk/repositories
+
 # Instala las dependencias de construcción (necesarias para algunos paquetes nativos)
 RUN apk add --no-cache python3 make g++
 
