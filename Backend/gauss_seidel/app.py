@@ -12,22 +12,45 @@ def is_numeric(value):
     except ValueError:
         return False
 
+def validate_matrix(A, b):
+    """Validar la matriz y vector de entrada."""
+    n = len(b)
+    
+    # Verificar que la matriz sea cuadrada
+    if len(A) != n or any(len(row) != n for row in A):
+        raise ValueError("La matriz debe ser cuadrada y coincidir con el tamaño del vector")
+    
+    # Verificar que no haya ceros en la diagonal
+    for i in range(n):
+        if A[i][i] == 0:
+            raise ValueError(f"El elemento diagonal A[{i+1}][{i+1}] no puede ser cero")
+    
+    # Verificar que la matriz sea diagonalmente dominante
+    for i in range(n):
+        diagonal = abs(A[i][i])
+        row_sum = sum(abs(A[i][j]) for j in range(n) if j != i)
+        if diagonal <= row_sum:
+            raise ValueError(f"La matriz no es diagonalmente dominante en la fila {i+1}")
+
 def gauss_seidel(matriz, vector, error_min, iteraciones_max):
     filas, columnas = matriz.shape
     x = np.zeros(filas)
     comp = np.zeros(filas)
-    iteraciones = [] 
+    iteraciones = []
 
     for k in range(iteraciones_max):
-        iteracion_actual = x.copy() 
+        iteracion_actual = x.copy()
         for valorF in range(filas):
             suma = 0
             for valorC in range(columnas):
                 if valorC != valorF:
                     suma += matriz[valorF, valorC] * x[valorC]
-            x[valorF] = (vector[valorF] - suma) / matriz[valorF, valorF]
+            try:
+                x[valorF] = (vector[valorF] - suma) / matriz[valorF, valorF]
+            except ZeroDivisionError:
+                raise ValueError(f"División por cero al calcular x[{valorF}]")
 
-        iteraciones.append({'iteracion': k + 1, 'x': x.tolist()}) 
+        iteraciones.append({'iteracion': k + 1, 'x': x.tolist()})
 
         for valorF in range(filas):
             suma = 0
@@ -39,6 +62,9 @@ def gauss_seidel(matriz, vector, error_min, iteraciones_max):
         if all(i <= error_min for i in error):
             break
 
+    if k == iteraciones_max - 1:
+        raise ValueError(f"No convergió después de {iteraciones_max} iteraciones. Último error: {max(error)}")
+
     return x, error.tolist(), iteraciones
 
 @app.route('/gauss-seidel', methods=['POST'])
@@ -48,22 +74,30 @@ def resolver_gauss_seidel():
     if 'matriz' not in data or 'vector' not in data:
         return jsonify({'error': 'Faltan campos necesarios: matriz y vector son requeridos.'}), 400
 
-    matriz = np.array(data['matriz'])
-    vector = np.array(data['vector'])
-    error_min = data.get('error_min', 1e-6)
-    iteraciones_max = data.get('iteraciones_max', 100)
+    try:
+        matriz = np.array(data['matriz'], dtype=float)
+        vector = np.array(data['vector'], dtype=float)
+        error_min = float(data.get('error_min', 1e-6))
+        iteraciones_max = int(data.get('iteraciones_max', 100))
+    except ValueError:
+        return jsonify({'error': 'Todos los elementos deben ser números válidos.'}), 400
 
-    if matriz.shape[0] != matriz.shape[1]:
-        return jsonify({'error': 'La matriz debe ser cuadrada.'}), 400
-    if len(vector) != matriz.shape[0]:
-        return jsonify({'error': 'La longitud del vector debe coincidir con el tamaño de la matriz.'}), 400
+    try:
+        validate_matrix(matriz, vector)
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
 
-    if not all(is_numeric(val) for val in matriz.flatten()) or not all(is_numeric(val) for val in vector):
-        return jsonify({'error': 'Por favor, asegúrate de que todos los elementos sean números.'}), 400
-
-    resultado, error, iteraciones = gauss_seidel(matriz, vector, error_min, iteraciones_max)
-
-    return jsonify({'resultado': resultado.tolist(), 'error': error, 'iteraciones': iteraciones})
+    try:
+        resultado, error, iteraciones = gauss_seidel(matriz, vector, error_min, iteraciones_max)
+        return jsonify({
+            'resultado': resultado.tolist(),
+            'error': error,
+            'iteraciones': iteraciones
+        })
+    except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error durante la ejecución: {str(e)}'}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5005)
