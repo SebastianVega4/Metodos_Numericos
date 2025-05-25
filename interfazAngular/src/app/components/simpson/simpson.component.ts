@@ -14,7 +14,7 @@ export class SimpsonComponent implements OnInit {
   lista: any[] = [];
   raiz: number = 0;
   imagen: string = '';
-  selectedField: string = ''; // Campo seleccionado para actualizar
+  selectedField: string = '';
 
   constructor(
     private fb: FormBuilder,
@@ -22,32 +22,53 @@ export class SimpsonComponent implements OnInit {
   ) {
     this.eventForm = this.fb.group({
       funcion: ['', Validators.required],
-      limitea: ['', Validators.required],
-      limiteb: ['', Validators.required],
+      limitea: ['', [Validators.required, Validators.pattern(/^-?\d*\.?\d+$/)]],
+      limiteb: ['', [Validators.required, Validators.pattern(/^-?\d*\.?\d+$/)]],
       nimagenes: ['', [Validators.required, Validators.min(2), this.parValidator]],
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
-  // Validador personalizado para el campo nimagenes (verifica que sea par)
+  // Validador personalizado para verificar que el número sea par
   parValidator(control: any) {
-    if (control.value && control.value % 2 !== 0) {
-      return { parError: 'El número de imágenes debe ser par' };
+    const value = control.value;
+    if (value && value % 2 !== 0) {
+      return { parError: true };
     }
     return null;
   }
 
   consulta() {
-    if (this.eventForm.invalid) {
-      return; // Si el formulario es inválido, no hacer nada
+    // Validar que a sea menor que b
+    const a = parseFloat(this.eventForm.get('limitea')?.value);
+    const b = parseFloat(this.eventForm.get('limiteb')?.value);
+
+    if (a >= b) {
+      alert('El límite inferior (a) debe ser menor que el límite superior (b)');
+      return;
+    }
+
+    // Validar que la función sea una expresión válida
+    try {
+      const testFunc = new Function('x', 'return ' + this.eventForm.get('funcion')?.value);
+      testFunc(1); // Test con un valor cualquiera
+    } catch (e) {
+      let errorMessage = 'Error en la función: ';
+      if (e instanceof Error) {
+        errorMessage += e.message;
+      } else if (typeof e === 'string') {
+        errorMessage += e;
+      }
+      alert(errorMessage);
+      return;
     }
 
     const simpson: Simpson = {
       funcion: this.eventForm.get('funcion')?.value,
-      limitea: this.eventForm.get('limitea')?.value,
-      limiteb: this.eventForm.get('limiteb')?.value,
-      nimagenes: this.eventForm.get('nimagenes')?.value
+      limitea: a,
+      limiteb: b,
+      nimagenes: parseInt(this.eventForm.get('nimagenes')?.value)
     };
 
     this.simpsonS.save(simpson).subscribe(
@@ -59,16 +80,22 @@ export class SimpsonComponent implements OnInit {
 
         if (Array.isArray(data)) {
           this.lista = data;
-          for (const iterator of this.lista) {
-            console.log(iterator.iteracion);
-          }
         } else {
           console.error('Los datos recibidos no son un array:', data);
+          alert('Formato de respuesta inesperado del servidor.');
         }
       },
       error => {
-        console.log(error);
-        this.eventForm.reset();
+        console.error(error);
+        let errorMessage = 'Error al procesar la solicitud: ';
+        if (error instanceof Error) {
+          errorMessage += error.message;
+        } else if (typeof error === 'string') {
+          errorMessage += error;
+        } else if (error.error?.error) {
+          errorMessage += error.error.error;
+        }
+        alert(errorMessage);
       }
     );
   }

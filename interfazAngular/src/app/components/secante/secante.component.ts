@@ -27,13 +27,13 @@ export class SecanteComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   // Validador personalizado para expresiones matemáticas
   validateMathExpression(control: any) {
     const value = control.value;
     if (!value) return null;
-    
+
     try {
       // Intenta evaluar la expresión con math y x
       const testFn = new Function('math', 'x', `return ${value}`);
@@ -48,7 +48,7 @@ export class SecanteComponent implements OnInit {
   validateNumber(control: any) {
     const value = control.value;
     if (value === null || value === '') return null;
-    
+
     if (isNaN(value)) {
       return { invalidNumber: true };
     }
@@ -73,11 +73,11 @@ export class SecanteComponent implements OnInit {
           this.showAlert(response.error);
           return;
         }
-        
+
         const data = response.Iteraciones;
         this.raiz = response.Raiz;
         this.imagen = 'data:image/png;base64,' + response.Imagen;
-        
+
         if (Array.isArray(data)) {
           this.lista = data;
         } else {
@@ -88,7 +88,7 @@ export class SecanteComponent implements OnInit {
       error => {
         console.error(error);
         let errorMessage = 'Ocurrió un error al procesar la solicitud';
-        
+
         if (error.error?.error) {
           errorMessage = this.parseErrorMessage(error.error.error);
         } else if (error.status === 0) {
@@ -96,7 +96,7 @@ export class SecanteComponent implements OnInit {
         } else if (error.status === 400) {
           errorMessage = 'Datos inválidos enviados al servidor';
         }
-        
+
         this.showAlert(errorMessage);
       }
     );

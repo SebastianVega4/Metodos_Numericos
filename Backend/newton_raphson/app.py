@@ -1,4 +1,3 @@
-# app.py
 from flask import Flask, request, jsonify
 import math
 import matplotlib.pyplot as plt

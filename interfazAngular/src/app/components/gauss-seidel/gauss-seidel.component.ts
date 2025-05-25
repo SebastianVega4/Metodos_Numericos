@@ -1,4 +1,3 @@
-// gauss-seidel.component.ts
 import { Component, OnInit } from '@angular/core';
 import { GaussSeidel } from 'src/app/models/gauss';
 import { GaussSeidelService } from 'src/app/services/gaussSeidelService';

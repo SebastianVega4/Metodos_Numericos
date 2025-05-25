@@ -33,7 +33,7 @@ export class BiseccionComponent implements OnInit {
     // Validar que x0 y x1 sean diferentes
     const x0 = this.eventForm.get('x0')?.value;
     const x1 = this.eventForm.get('x1')?.value;
-    
+
     if (x0 === x1) {
       alert('Los puntos x0 y x1 deben ser diferentes');
       return;
@@ -89,27 +89,27 @@ export class BiseccionComponent implements OnInit {
     );
   }
 
-openCalculator(field: string) {
-  this.selectedField = field; // Guarda el campo seleccionado
-  const calculatorModal = document.getElementById('calculatorModal');
-  if (calculatorModal) {
-    calculatorModal.style.display = 'flex';
+  openCalculator(field: string) {
+    this.selectedField = field; // Guarda el campo seleccionado
+    const calculatorModal = document.getElementById('calculatorModal');
+    if (calculatorModal) {
+      calculatorModal.style.display = 'flex';
+    }
   }
-}
 
-closeCalculator() {
-  const calculatorModal = document.getElementById('calculatorModal');
-  if (calculatorModal) {
-    calculatorModal.style.display = 'none';
+  closeCalculator() {
+    const calculatorModal = document.getElementById('calculatorModal');
+    if (calculatorModal) {
+      calculatorModal.style.display = 'none';
+    }
   }
-}
 
-saveFunction(func: string) {
-  if (this.selectedField) {
-    this.eventForm.get(this.selectedField)?.setValue(func);
-    this.closeCalculator();
+  saveFunction(func: string) {
+    if (this.selectedField) {
+      this.eventForm.get(this.selectedField)?.setValue(func);
+      this.closeCalculator();
+    }
   }
-}
 
 
 }
