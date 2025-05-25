@@ -32,9 +32,9 @@
               <input type="text" formControlName="funcion" class="form-control form-control-lg" placeholder="Funcion Despeje" readonly>
               <button type="button" class="btn btn-secondary" (click)="openCalculator('funcion')">🧮</button>
             </div>
-            <div class="text-danger" *ngIf="eventForm.get('funcion')?.hasError('required') && eventForm.get('funcion')?.touched">
-              <span>La función despeje<strong> es obligatoria</strong></span>
-            </div>
+            <div class="text-danger" *ngIf="eventForm.get('funcion')?.hasError('invalidExpression')">
+  <span>La expresión matemática <strong>no es válida</strong></span>
+</div>
           </div>
           <div class="mb-3">
             <label class="block mb-2 text-sm font-bold text-gray-700" for="description">
