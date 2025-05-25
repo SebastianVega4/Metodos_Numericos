@@ -58,18 +58,47 @@ def generar_grafica(f, x0, x1, raiz):
 @app.route('/secante', methods=['POST'])
 def solve_secante():
     data = request.json
-    f_str = data['funcion']
-    x0 = data['x0']
-    x1 = data['x1']
     
-    def f(x):
-        return eval(f_str, {"math": math, "x": x})
+    # Validar campos requeridos
+    if not data or 'funcion' not in data or 'x0' not in data or 'x1' not in data:
+        return jsonify({'error': 'Datos incompletos. Se requieren funcion, x0 y x1'}), 400
+    
+    f_str = data['funcion']
+    
+    # Validar que x0 y x1 sean números
+    try:
+        x0 = float(data['x0'])
+        x1 = float(data['x1'])
+    except ValueError:
+        return jsonify({'error': 'Los puntos iniciales deben ser números válidos'}), 400
+
+    # Validar función matemática
+    try:
+        # Primero validar sintaxis básica
+        compile(f_str, '<string>', 'eval')
+        
+        # Luego validar con valores
+        def f(x):
+            return eval(f_str, {"math": math, "x": x})
+        
+        # Probar con un valor
+        test_x = (x0 + x1) / 2
+        f(test_x)
+    except SyntaxError as e:
+        return jsonify({'error': f'Error de sintaxis en la función: {str(e)}'}), 400
+    except NameError as e:
+        return jsonify({'error': f'Nombre no reconocido en la función: {str(e)}. Use "math." para funciones matemáticas'}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error en la función: {str(e)}'}), 400
 
     try:
         root, iteraciones = secante(f, x0, x1)
         imagen = generar_grafica(f, x0, x1, root)
         return jsonify({'Raiz': root, 'Iteraciones': iteraciones, 'Imagen': imagen})
     except ValueError as e:
+        return jsonify({'error': str(e)}), 400
+    except Exception as e:
+        return jsonify({'error': f'Error durante la ejecución: {str(e)}'}), 500
         return jsonify({'error': str(e)}), 400
 
 if __name__ == '__main__':
