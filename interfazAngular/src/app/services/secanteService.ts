@@ -8,7 +8,7 @@ import { Secante } from '../models/secante';
   providedIn: 'root'
 })
 export class SecanteService {
-  private url = 'http://localhost:5002/secante';
+  private url = 'http://localhost:5004/secante';
 
   constructor(private http: HttpClient) { }
 

@@ -8,6 +8,7 @@ import { NewtonRaphsonComponent } from './components/newton-raphson/newton-raphs
 import { GaussSeidelComponent } from './components/gauss-seidel/gauss-seidel.component';
 import { SimpsonComponent } from './components/simpson/simpson.component';
 import { TrapecioComponent } from './components/trapecio/trapecio.component';
+import { EulerComponent } from './components/euler/euler.component';
 import {CalculatorComponent} from "./components/calculator/calculator.component";
 
 const routes: Routes = [
@@ -20,6 +21,7 @@ const routes: Routes = [
   { path: 'Simpson', component:SimpsonComponent},
   { path: 'Trapecio', component:TrapecioComponent },
   { path: 'calculator', component:CalculatorComponent },
+  { path: 'Euler', component:EulerComponent},
 
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

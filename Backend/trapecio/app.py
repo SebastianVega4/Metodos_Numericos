@@ -102,4 +102,4 @@ def solve_trapecio():
         return jsonify({'error': f'Error durante la ejecución: {str(e)}'}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5006)
+    app.run(host='0.0.0.0', port=5007)

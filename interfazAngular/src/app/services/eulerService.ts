@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { NewtonRaphson } from "src/app/models/NewtonRaphson";
+import { Euler } from '../models/euler';
 
 @Injectable({
   providedIn: 'root'
 })
-export class NewtonRaphsonService {
-  private url = 'http://localhost:5003/newton_raphson'
+export class EulerService {
+  private url = 'http://localhost:5009/euler'; // Ajusta el puerto según tu configuración
 
   constructor(private http: HttpClient) { }
 
-  save(newtonRaphson: NewtonRaphson): Observable<any> {
-    return this.http.post(this.url, newtonRaphson).pipe(
+  solve(euler: Euler): Observable<any> {
+    return this.http.post(this.url, euler).pipe(
       catchError(error => {
         let errorMessage = 'Error desconocido';
         if (error.error && error.error.error) {

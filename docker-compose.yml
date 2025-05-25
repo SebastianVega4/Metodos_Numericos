@@ -1,10 +1,11 @@
 services:
-  newton_raphson:
+
+  punto_fijo:
     build: 
-      context: ./Backend/newton_raphson
-      network: host  # Solo para construcción
+      context: ./Backend/punto_fijo
+      network: host
     ports:
-      - "5000:5000"
+      - "5001:5001"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -15,7 +16,18 @@ services:
       context: ./Backend/biseccion
       network: host
     ports:
-      - "5001:5001"
+      - "5002:5002"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    network_mode: bridge
+
+  newton_raphson:
+    build: 
+      context: ./Backend/newton_raphson
+      network: host  # Solo para construcción
+    ports:
+      - "50003:5003"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -26,29 +38,18 @@ services:
       context: ./Backend/secante
       network: host
     ports:
-      - "5002:5002"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
-
-  punto_fijo:
-    build: 
-      context: ./Backend/punto_fijo
-      network: host
-    ports:
-      - "5003:5003"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
-
-  broyden:
-    build: 
-      context: ./Backend/broyden
-      network: host
-    ports:
       - "5004:5004"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    network_mode: bridge
+
+  jacobi:
+    build: 
+      context: ./Backend/jacobi
+      network: host
+    ports:
+      - "5005:5005"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -59,7 +60,7 @@ services:
       context: ./Backend/gauss_seidel
       network: host
     ports:
-      - "5005:5005"
+      - "5006:5006"
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -68,17 +69,6 @@ services:
   trapecio:
     build: 
       context: ./Backend/trapecio
-      network: host
-    ports:
-      - "5006:5006"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
-
-  jacobi:
-    build: 
-      context: ./Backend/jacobi
       network: host
     ports:
       - "5007:5007"
@@ -98,6 +88,17 @@ services:
       - 1.1.1.1
     network_mode: bridge
 
+  euler:
+    build: 
+      context: ./Backend/euler
+      network: host
+    ports:
+      - "5009:5009"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    network_mode: bridge
+
   angular-app:
     build:
       context: ./interfazAngular
@@ -106,5 +107,5 @@ services:
       args:
         ALPINE_MIRROR: mirrors.aliyun.com  # Usar mirror alternativo
     ports:
-      - "5009:5009"
+      - "5000:5000"
     network_mode: bridge

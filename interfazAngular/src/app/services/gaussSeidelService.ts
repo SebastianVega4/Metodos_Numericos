@@ -8,7 +8,7 @@ import { GaussSeidel } from '../models/gauss';
   providedIn: 'root'
 })
 export class GaussSeidelService {
-  private url = 'http://localhost:5005/gauss-seidel'
+  private url = 'http://localhost:5006/gauss-seidel'
 
   constructor(private http: HttpClient) { }
 

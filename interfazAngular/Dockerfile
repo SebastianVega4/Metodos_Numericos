@@ -29,7 +29,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
 # Expone el puerto 5009 para el servidor web
-EXPOSE 5009
+EXPOSE 5000
 
 # Inicia Nginx cuando se ejecute el contenedor
 CMD ["nginx", "-g", "daemon off;"]

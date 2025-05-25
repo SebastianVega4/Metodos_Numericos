@@ -8,7 +8,7 @@ import { PuntoF } from '../models/PuntoF';
   providedIn: 'root'
 })
 export class PuntoFService {
-  private url = 'http://localhost:5003/punto_fijo'
+  private url = 'http://localhost:5001/punto_fijo'
 
   constructor(private http: HttpClient) { }
 

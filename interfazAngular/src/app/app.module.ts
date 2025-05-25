@@ -16,6 +16,7 @@ import { JacobiComponent } from './components/jacobi/jacobi.component';
 import { TrapecioComponent } from './components/trapecio/trapecio.component';
 import { SimpsonComponent } from './components/simpson/simpson.component';
 import { CalculatorComponent } from './components/calculator/calculator.component';
+import { EulerComponent } from './components/euler/euler.component';
 
 
 @NgModule({
@@ -29,8 +30,8 @@ import { CalculatorComponent } from './components/calculator/calculator.componen
     JacobiComponent,
     TrapecioComponent,
     SimpsonComponent,
-    CalculatorComponent
-  
+    CalculatorComponent,
+    EulerComponent
   ],
   imports: [
     BrowserModule,

@@ -8,7 +8,7 @@ import { trapecio } from '../models/trapecio';
   providedIn: 'root'
 })
 export class trapecioService {
-  private url = 'http://localhost:5006/trapecio'
+  private url = 'http://localhost:5007/trapecio'
 
   constructor(private http: HttpClient) { }
 

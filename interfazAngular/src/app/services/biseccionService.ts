@@ -8,7 +8,7 @@ import { Biseccion } from '../models/biseccion';
   providedIn: 'root'
 })
 export class BiseccionService {
-  private url = 'http://localhost:5001/biseccion'
+  private url = 'http://localhost:5002/biseccion'
 
   constructor(private http: HttpClient) { }
 
