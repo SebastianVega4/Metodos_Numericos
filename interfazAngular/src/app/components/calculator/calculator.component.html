@@ -1,18 +1,15 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <link rel="stylesheet" href="calculator.component.css" />
-</head>
-<body class="calculator-body">
-
-<main>
+<div class="calculator-container">
   <table>
+    <br>
+    <br>
     <tr>
       <th colspan="5">
-        <input id="displayBox" type="text" readonly />
+        <div class="display-container">
+          <input id="displayBox" type="text" [(ngModel)]="operationString" 
+                 (click)="setCursorPosition($event)" 
+                 (keydown)="handleKeyDown($event)"
+                 placeholder="Ingrese fórmula" />
+        </div>
       </th>
     </tr>
     <tr>
@@ -252,10 +249,5 @@
         </div>
       </td>
     </tr>
-
-
   </table>
-</main>
-<script src="calculator.component.ts"></script>
-</body>
-</html>
+</div>

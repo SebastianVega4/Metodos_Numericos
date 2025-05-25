@@ -12,8 +12,9 @@ interfazAngular/.angular/cache/
 
 .idea/
 .idx/
-.node_modules/
+node_modules/
 .vscode/
+temp.txt
 
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/

@@ -1,105 +1,208 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-calculator',
   templateUrl: './calculator.component.html',
   styleUrls: ['./calculator.component.css']
 })
-export class CalculatorComponent {
+export class CalculatorComponent implements AfterViewChecked {
   operationString: string = '';
   basicOperationShape = /[-+*/]/;
+  cursorPosition: number = 0;
+  memoryValue: number = 0;
 
+  @ViewChild('displayBox', { static: true }) displayBox!: ElementRef<HTMLInputElement>;
   @Output() save = new EventEmitter<string>();
   @Output() close = new EventEmitter<void>();
 
-  // Métodos de la calculadora
+  ngAfterViewChecked() {
+    this.adjustFontSize();
+  }
+
+  adjustFontSize() {
+    const input = this.displayBox.nativeElement;
+    const maxWidth = parseInt(getComputedStyle(input).width);
+    const textWidth = this.getTextWidth(this.operationString, getComputedStyle(input).font);
+    
+    if (textWidth > maxWidth * 1.5) {
+      input.classList.add('smaller-font');
+      input.classList.remove('small-font');
+    } else if (textWidth > maxWidth) {
+      input.classList.add('small-font');
+      input.classList.remove('smaller-font');
+    } else {
+      input.classList.remove('small-font', 'smaller-font');
+    }
+    
+    // Asegurar que el texto visible incluya la posición del cursor
+    this.scrollToCursor();
+  }
+
+  scrollToCursor() {
+    const input = this.displayBox.nativeElement;
+    const charWidth = this.getTextWidth('M', getComputedStyle(input).font);
+    const scrollPos = this.cursorPosition * charWidth - input.clientWidth / 2;
+    input.scrollLeft = Math.max(0, scrollPos);
+  }
+
+  getTextWidth(text: string, font: string): number {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (context) {
+      context.font = font;
+      return context.measureText(text).width;
+    }
+    return 0;
+  }
+
+  setCursorPosition(event: MouseEvent) {
+    const input = event.target as HTMLInputElement;
+    const rect = input.getBoundingClientRect();
+    const x = event.clientX - rect.left + input.scrollLeft;
+    let pos = 0;
+    let width = 0;
+    
+    for (let i = 0; i < this.operationString.length; i++) {
+      const charWidth = this.getTextWidth(this.operationString[i], getComputedStyle(input).font);
+      width += charWidth;
+      if (width > x) break;
+      pos++;
+    }
+    
+    this.cursorPosition = pos;
+    setTimeout(() => {
+      input.setSelectionRange(pos, pos);
+      this.scrollToCursor();
+    }, 0);
+  }
+
+  handleKeyDown(event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    
+    // Permitir navegación con teclado
+    if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+      setTimeout(() => {
+        this.cursorPosition = input.selectionStart || 0;
+        this.scrollToCursor();
+      }, 0);
+      return;
+    }
+    
+    // Manejar edición en posición del cursor
+    if (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Delete') {
+      event.preventDefault();
+      
+      if (event.key === 'Backspace') {
+        if (this.cursorPosition > 0) {
+          this.operationString = 
+            this.operationString.substring(0, this.cursorPosition - 1) + 
+            this.operationString.substring(this.cursorPosition);
+          this.cursorPosition--;
+        }
+      } else if (event.key === 'Delete') {
+        if (this.cursorPosition < this.operationString.length) {
+          this.operationString = 
+            this.operationString.substring(0, this.cursorPosition) + 
+            this.operationString.substring(this.cursorPosition + 1);
+        }
+      } else {
+        this.operationString = 
+          this.operationString.substring(0, this.cursorPosition) + 
+          event.key + 
+          this.operationString.substring(this.cursorPosition);
+        this.cursorPosition++;
+      }
+      
+      // Actualizar la posición del cursor en el input
+      setTimeout(() => {
+        input.setSelectionRange(this.cursorPosition, this.cursorPosition);
+        this.scrollToCursor();
+      }, 0);
+    }
+  }
+
   writeToDisplay(value: string) {
-    const displayBox = document.getElementById("displayBox") as HTMLInputElement;
-    displayBox.value += value;
-    this.operationString = displayBox.value;
+    this.operationString = 
+      this.operationString.substring(0, this.cursorPosition) + 
+      value + 
+      this.operationString.substring(this.cursorPosition);
+    this.cursorPosition += value.length;
+    
+    // Enfocar y posicionar el cursor
+    setTimeout(() => {
+      this.displayBox.nativeElement.focus();
+      this.displayBox.nativeElement.setSelectionRange(this.cursorPosition, this.cursorPosition);
+      this.scrollToCursor();
+    }, 0);
   }
 
   writeMathFunction(data: string) {
-    const displayBox = document.getElementById("displayBox") as HTMLInputElement;
-    let currentValue = displayBox.value;
-
-    // Reemplaza las funciones matemáticas con las funciones de Math
-    if (data === 'sin(') {
-      currentValue += 'math.sin(';
-    } else if (data === 'cos(') {
-      currentValue += 'math.cos(';
-    } else if (data === 'tan(') {
-      currentValue += 'math.tan(';
-    } else if (data === 'sqrt(') {
-      currentValue += 'math.sqrt(';
-    } else if (data === 'log(') {
-      currentValue += 'math.log10('; // Math.log10 para log base 10
-    } else if (data === 'ln(') {
-      currentValue += 'math.log(';
-    } else if (data === '10^x') {
-      currentValue += 'math.pow(10,';
-    } else if (data === 'x^2') {
-      currentValue += '**2';
-    } else if (data === 'x^3') {
-      currentValue += '**3';
-    } else if (data === 'x^-1') {
-      currentValue += '**-1';
-    } else if (data === 'e') {
-      currentValue += 'math.exp';
-    } else if (data === '!') {
-      // Implementar factorial si es necesario
-    } else {
-      currentValue += data;
+    let transformedData = data;
+    
+    switch(data) {
+      case 'sin(': transformedData = 'Math.sin('; break;
+      case 'cos(': transformedData = 'Math.cos('; break;
+      case 'tan(': transformedData = 'Math.tan('; break;
+      case 'sqrt(': transformedData = 'Math.sqrt('; break;
+      case 'log(': transformedData = 'Math.log10('; break;
+      case 'ln(': transformedData = 'Math.log('; break;
+      case '10^x': transformedData = 'Math.pow(10,'; break;
+      case 'x^2': transformedData = '**2'; break;
+      case 'x^3': transformedData = '**3'; break;
+      case 'x^-1': transformedData = '**-1'; break;
+      case 'e': transformedData = 'Math.E'; break;
+      case 'PI': transformedData = 'Math.PI'; break;
+      case '!': transformedData = '!'; break;
     }
-
-    displayBox.value = currentValue;
-    this.operationString = currentValue;
+    
+    this.writeToDisplay(transformedData);
   }
 
   writeOperatorToDisplay(operator: string) {
-    const displayBox = document.getElementById("displayBox") as HTMLInputElement;
-    let legacy = displayBox.value;
-
-    // Si el último carácter es una operación básica, reemplazarlo
-    if (this.basicOperationShape.test(legacy.slice(-1))) {
-      this.operationString = legacy.slice(0, -1) + operator;
+    // Reemplazar operador si el último carácter es un operador
+    if (this.operationString.length > 0 && 
+        this.basicOperationShape.test(this.operationString[this.operationString.length - 1])) {
+      this.operationString = this.operationString.slice(0, -1) + operator;
+      if (this.cursorPosition === this.operationString.length + 1) {
+        this.cursorPosition--;
+      }
     } else {
-      this.operationString = legacy + operator;
+      this.writeToDisplay(operator);
     }
-
-    displayBox.value = this.operationString;
   }
 
   toggleSign() {
-    const displayBox = document.getElementById("displayBox") as HTMLInputElement;
-    let currentValue = displayBox.value;
-
-    if (currentValue.startsWith('-')) {
-      displayBox.value = currentValue.slice(1);
+    if (this.operationString.startsWith('-')) {
+      this.operationString = this.operationString.slice(1);
+      if (this.cursorPosition === 1) {
+        this.cursorPosition = 0;
+      }
     } else {
-      displayBox.value = '-' + currentValue;
+      this.operationString = '-' + this.operationString;
+      this.cursorPosition++;
     }
-
-    this.operationString = displayBox.value;
   }
 
   clearDisplay() {
-    const displayBox = document.getElementById("displayBox") as HTMLInputElement;
-    displayBox.value = '';
     this.operationString = '';
+    this.cursorPosition = 0;
   }
 
   eraseLastInput() {
-    const displayBox = document.getElementById("displayBox") as HTMLInputElement;
-    let currentValue = displayBox.value;
-    displayBox.value = currentValue.slice(0, -1);
-    this.operationString = displayBox.value;
+    if (this.operationString.length > 0) {
+      this.operationString = this.operationString.slice(0, -1);
+      if (this.cursorPosition > this.operationString.length) {
+        this.cursorPosition = this.operationString.length;
+      }
+    }
   }
 
   passOperationString() {
     try {
-      // Evalúa la expresión matemática usando la función Function constructor
-      const result = new Function('Math', 'return ' + this.operationString)(Math);
+      // Reemplazar Math por math para compatibilidad
+      const expression = this.operationString.replace(/Math\./g, 'math.');
+      const result = new Function('math', `return ${expression}`)(Math);
       this.save.emit(result.toString());
     } catch (e) {
       this.save.emit('Error');
@@ -108,38 +211,42 @@ export class CalculatorComponent {
   }
 
   saveFunctionString() {
-    // Emitir el string de la función sin realizar la operación
     this.save.emit(this.operationString);
     this.close.emit();
   }
 
-  // Método para el botón X
-  writex() {
-    this.writeToDisplay('x');
-  }
-
-  writey() {
-    this.writeToDisplay('y');
-  }
-
-  // Métodos para la memoria
+  // Funciones de memoria
   clearMemory() {
-    // Implementa la funcionalidad de memoria
+    this.memoryValue = 0;
   }
 
   readMemory() {
-    // Implementa la funcionalidad de lectura de memoria
+    this.writeToDisplay(this.memoryValue.toString());
   }
 
   addToMemory() {
-    // Implementa la funcionalidad de añadir a memoria
+    try {
+      const currentValue = eval(this.operationString) || 0;
+      this.memoryValue += currentValue;
+    } catch (e) {
+      // Ignorar errores
+    }
   }
 
   subtractFromMemory() {
-    // Implementa la funcionalidad de restar de memoria
+    try {
+      const currentValue = eval(this.operationString) || 0;
+      this.memoryValue -= currentValue;
+    } catch (e) {
+      // Ignorar errores
+    }
   }
 
   saveToMemory() {
-    // Implementa la funcionalidad de guardar en memoria
+    try {
+      this.memoryValue = eval(this.operationString) || 0;
+    } catch (e) {
+      // Ignorar errores
+    }
   }
 }

@@ -1,51 +1,125 @@
-input {
-    text-align: right;
-    background-color: white;
-    width: 330px;
-    margin-bottom: 10px;
-    border-radius: 10px;
-    font-size: 30px;
+.calculator-container {
+  display: inline-block;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.display-container {
+  position: relative;
+  width: 330px;
+  margin-bottom: 10px;
+  overflow: hidden;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+#displayBox {
+  text-align: left;
+  background-color: white;
+  width: 100%;
+  border: none;
+  font-size: 30px;
+  padding: 10px;
+  white-space: nowrap;
+  overflow-x: auto;
+  cursor: text;
+  transition: font-size 0.3s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+#displayBox.small-font {
+  font-size: 24px;
+}
+
+#displayBox.smaller-font {
+  font-size: 18px;
+}
+
+#displayBox::-webkit-scrollbar {
+  height: 5px;
+}
+
+#displayBox::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+#displayBox::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+#displayBox::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }
 
 table {
-    display: inline-block;
-    padding: 20px;
-    background-color: grey;
-    border-radius: 10px;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 .displaytable {
-    display: table;
+  display: table;
 }
 
 .displaytable-cell {
-    display: table-cell;
+  display: table-cell;
 }
-  
+
 .button {
-    width: 60px;
-    height: 35px;
-    font-size: 20px;
-    border-radius: 5px;
+  width: 60px;
+  height: 35px;
+  font-size: 16px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin: 2px;
+  font-weight: 500;
+}
+
+.button:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.button:active {
+  transform: translateY(1px);
 }
 
 .blackbutton { 
-    background-color: black; 
-    color: white;
+  background-color: #333; 
+  color: white;
 }
 
 .greenbutton {
-    background-color: #91ff7d;
+  background-color: #4CAF50;
+  color: white;
 }
 
 .greybutton {
-    background-color: #cccccc;
+  background-color: #e0e0e0;
 }
 
 .bluebutton {
-    background-color: #6288f3;
+  background-color: #2196F3;
+  color: white;
 }
 
 .redbutton {
-    background-color: #f76767;
+  background-color: #f44336;
+  color: white;
+}
+
+/* Botones especiales */
+#bEquals {
+  width: 100%;
+}
+
+#bMultiplyX, #bMultiplyY {
+  width: 100%;
 }
