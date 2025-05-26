@@ -1,10 +1,10 @@
 FROM python:3.13-slim
 
-COPY . .
+WORKDIR /app
+
 COPY requirements.txt .
 
 RUN pip install --upgrade pip
-RUN pip install flask flask-cors numpy matplotlib
 RUN pip install -r requirements.txt
 
 COPY app.py .

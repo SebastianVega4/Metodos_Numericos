@@ -1,11 +1,9 @@
-# app.py
 from flask import Flask, request, jsonify
-import math
 import matplotlib.pyplot as plt
 import numpy as np
 import io
 import base64
-import re
+import math
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -20,77 +18,123 @@ def validate_expression(expr):
     pattern = r'\b[a-zA-Z_][a-zA-Z0-9_]*\b'
     for match in re.finditer(pattern, expr):
         word = match.group()
-        if word not in allowed_funcs and word != 'x':
+        if word not in allowed_funcs and word not in ['x', 'y']:
             raise ValueError(f"Término no permitido en la expresión: '{word}'")
 
-def simpson(f, a, b, n=100):
-    if n <= 0:
-        raise ValueError("El número de subintervalos debe ser mayor que cero")
-    if n % 2 == 1:
-        raise ValueError("El número de subintervalos debe ser par")
-    if a >= b:
-        raise ValueError("El límite inferior (a) debe ser menor que el límite superior (b)")
+def metodo_euler(f, x0, y0, x_inicio, x_fin, h, sol_exacta=None):
+    resultados = []
+    x_vals = np.arange(x_inicio, x_fin + h, h)
+    y_euler = y0
+    error_maximo = 0
+    error_promedio = 0
+    error_acumulado = 0
+    puntos = 0
     
-    h = (b - a) / n
-    try:
-        x = np.linspace(a, b, n + 1)
-        y = np.array([f(xi) for xi in x])
-    except Exception as e:
-        raise ValueError(f"Error al evaluar la función: {str(e)}")
+    for x in x_vals:
+        if x < x0:
+            continue
+            
+        y_exact = None
+        error = 0
+        
+        if sol_exacta:
+            try:
+                y_exact = sol_exacta(x)
+                error = abs(y_exact - y_euler)
+                error_acumulado += error
+                puntos += 1
+                if error > error_maximo:
+                    error_maximo = error
+            except:
+                pass
+            
+        resultados.append({
+            'x': x,
+            'y_euler': y_euler,
+            'y_exact': y_exact,
+            'error': error if sol_exacta else None
+        })
+        
+        # Calcular siguiente paso
+        y_euler += h * f(x, y_euler)
     
-    S = y[0] + y[-1] + 4 * np.sum(y[1:-1:2]) + 2 * np.sum(y[2:-1:2])
-    return S * h / 3, x, y
+    if puntos > 0 and sol_exacta:
+        error_promedio = error_acumulado / puntos
+    
+    return resultados, error_maximo, error_promedio
 
-@app.route('/simpson', methods=['POST'])
-def solve_simpson():
+def generar_grafica_euler(resultados, mostrar_exacta):
+    plt.figure()
+    
+    x_vals = [r['x'] for r in resultados]
+    y_euler = [r['y_euler'] for r in resultados]
+    
+    plt.plot(x_vals, y_euler, 'b-', label='Solución Euler')
+    
+    if mostrar_exacta and resultados[0]['y_exact'] is not None:
+        y_exact = [r['y_exact'] for r in resultados]
+        plt.plot(x_vals, y_exact, 'r--', label='Solución Exacta')
+    
+    plt.title('Método de Euler')
+    plt.xlabel('x')
+    plt.ylabel('y')
+    plt.legend()
+    plt.grid(True)
+    
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plt.close()
+    
+    return base64.b64encode(img.getvalue()).decode('utf-8')
+
+@app.route('/euler', methods=['POST', 'OPTIONS']) 
+def solve_euler():
     data = request.json
     
-    # Validar datos de entrada
-    if not data or 'funcion' not in data or 'limitea' not in data or 'limiteb' not in data:
-        return jsonify({'error': 'Datos incompletos. Se requieren: funcion, limitea y limiteb.'}), 400
+    # Validar campos requeridos
+    required_fields = ['funcion', 'x0', 'y0', 'xInicio', 'xFin', 'paso']
+    if not all(field in data for field in required_fields):
+        return jsonify({'error': 'Datos incompletos. Se requieren todos los campos.'}), 400
     
     try:
+        # Validar y convertir datos
         f_str = data['funcion']
-        a = float(data['limitea'])
-        b = float(data['limiteb'])
-        n = int(data.get('nimagenes', 100))
+        x0 = float(data['x0'])
+        y0 = float(data['y0'])
+        x_inicio = float(data['xInicio'])
+        x_fin = float(data['xFin'])
+        h = float(data['paso'])
+        
+        mostrar_exacta = data.get('mostrarExacta', False)
+        sol_exacta_str = data.get('solucionExacta')
         
         # Validar expresión matemática
         validate_expression(f_str)
         
-        # Crear función
-        f = lambda x: eval(f_str, {"math": math, "x": x, "__builtins__": {}})
+        # Crear función para la EDO
+        def f(x, y):
+            return eval(f_str, {"math": math, "x": x, "y": y})
+        
+        # Crear función para solución exacta si existe
+        sol_exacta = None
+        if mostrar_exacta and sol_exacta_str:
+            validate_expression(sol_exacta_str)
+            sol_exacta = lambda x: eval(sol_exacta_str, {"math": math, "x": x})
         
         # Ejecutar método
-        resultado, x, y = simpson(f, a, b, n)
+        resultados, error_maximo, error_promedio = metodo_euler(
+            f, x0, y0, x_inicio, x_fin, h, sol_exacta
+        )
         
         # Generar gráfica
-        plt.figure()
-        plt.plot(x, y, 'b', zorder=5, label='f(x)')
-        plt.scatter(x, y, color='blue')
-        midpoints = [(x[i] + x[i + 1]) / 2 for i in range(n)]
-        midpoints_y = [f(mid) for mid in midpoints]
-        plt.scatter(midpoints, midpoints_y, color='red', zorder=5, label='Puntos medios')
-        plt.fill_between(x, 0, y, where=[(xi >= a) and (xi <= b) for xi in x], color='skyblue', alpha=0.4)
-        plt.title('Método de Simpson')
-        plt.xlabel('x')
-        plt.ylabel('f(x)')
-        plt.legend()
-
-        img = io.BytesIO()
-        plt.savefig(img, format='png')
-        img.seek(0)
-        plt.close()
-
-        grafica = base64.b64encode(img.getvalue()).decode('utf-8')
-
-        resultados = [{'x': float(x[i]), 'y': float(y[i])} for i in range(len(x))]
-        resultados += [{'x': float(midpoints[i]), 'y': float(midpoints_y[i])} for i in range(len(midpoints))]
+        grafica = generar_grafica_euler(resultados, mostrar_exacta)
         
         return jsonify({
-            'Raiz': resultado,
-            'Grafica': grafica,
-            'Resultados': resultados
+            'resultados': resultados,
+            'grafica': grafica,
+            'errorMaximo': error_maximo,
+            'errorPromedio': error_promedio
         })
         
     except ValueError as e:
@@ -101,4 +145,5 @@ def solve_simpson():
         return jsonify({'error': f'Error durante la ejecución: {str(e)}'}), 500
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5009)
+    app = Flask(__name__)
+CORS(app, resources={r"/euler": {"origins": "*", "methods": ["POST", "OPTIONS"]}})
