@@ -4,10 +4,11 @@ import numpy as np
 import io
 import base64
 import math
+import re
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app)
+CORS(app)  # Configuración CORS global
 
 def validate_expression(expr):
     """Valida que la expresión matemática sea segura y válida."""
@@ -88,8 +89,12 @@ def generar_grafica_euler(resultados, mostrar_exacta):
     
     return base64.b64encode(img.getvalue()).decode('utf-8')
 
-@app.route('/euler', methods=['POST', 'OPTIONS']) 
+@app.route('/euler', methods=['POST'])
 def solve_euler():
+    # Manejar solicitudes OPTIONS automáticamente
+    if request.method == 'OPTIONS':
+        return _build_cors_preflight_response()
+    
     data = request.json
     
     # Validar campos requeridos
@@ -144,6 +149,12 @@ def solve_euler():
     except Exception as e:
         return jsonify({'error': f'Error durante la ejecución: {str(e)}'}), 500
 
+def _build_cors_preflight_response():
+    response = jsonify({'status': 'preflight accepted'})
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    response.headers.add("Access-Control-Allow-Headers", "*")
+    response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+    return response
+
 if __name__ == '__main__':
-    app = Flask(__name__)
-CORS(app, resources={r"/euler": {"origins": "*", "methods": ["POST", "OPTIONS"]}})
+    app.run(host='0.0.0.0', port=5009, debug=True)

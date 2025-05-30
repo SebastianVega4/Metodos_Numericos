@@ -3,107 +3,107 @@ services:
   punto_fijo:
     build: 
       context: ./Backend/punto_fijo
-      network: host
+    #  network: host
     ports:
       - "5001:5001"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    #dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   biseccion:
     build: 
       context: ./Backend/biseccion
-      network: host
+    #  network: host
     ports:
       - "5002:5002"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    #dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   newton_raphson:
     build: 
       context: ./Backend/newton_raphson
-      network: host
+    #  network: host
     ports:
       - "5003:5003"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    #dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   secante:
     build: 
       context: ./Backend/secante
-      network: host
+    #  network: host
     ports:
       - "5004:5004"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    #dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   jacobi:
     build: 
       context: ./Backend/jacobi
-      network: host
+    #  network: host
     ports:
       - "5005:5005"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    #dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   gauss_seidel:
     build: 
       context: ./Backend/gauss_seidel
-      network: host
+    #  network: host
     ports:
       - "5006:5006"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    #dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   trapecio:
     build: 
       context: ./Backend/trapecio
-      network: host
+    #  network: host
     ports:
       - "5007:5007"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    #dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   simpson:
     build: 
       context: ./Backend/simpson
-      network: host
+    # network: host
     ports:
       - "5008:5008"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+    # dns:
+    #  - 8.8.8.8
+    #  - 1.1.1.1
+    #network_mode: bridge
 
   euler:
     build: 
-      context: ./Backend/euler
-      network: host
+      context: ./Backend/euler  # <-- VERIFICAR RUTA CORRECTA
+      # network: host  # <-- ELIMINAR ESTA LÍNEA
     ports:
-      - "5009:5009"
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    network_mode: bridge
+      - "5009:5009"  # <-- ASEGURAR QUE COINCIDEN PUERTOS
+    # dns:  # <-- OPCIONAL: ELIMINAR SI NO ES NECESARIO
+    #   - 8.8.8.8
+    #   - 1.1.1.1
+    # network_mode: bridge  # <-- ELIMINAR (USAR RED POR DEFECTO)
 
   angular-app:
     build:
       context: ./interfazAngular
-      dockerfile: Dockerfile
-      network: host
+    #  dockerfile: Dockerfile
+    #  network: host
     ports:
       - "5000:80"
-    network_mode: bridge
+    #network_mode: bridge

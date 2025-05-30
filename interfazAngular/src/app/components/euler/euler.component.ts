@@ -52,14 +52,16 @@ export class EulerComponent implements OnInit {
 
     const formValue = this.eventForm.value;
     const euler: Euler = {
-      funcion: formValue.funcion,
-      x0: formValue.x0,
-      y0: formValue.y0,
-      xInicio: formValue.xInicio,
-      xFin: formValue.xFin,
-      paso: formValue.paso,
-      solucionExacta: formValue.mostrarExacta ? formValue.solucionExacta : undefined
-    };
+    funcion: formValue.funcion,
+    x0: formValue.x0,
+    y0: formValue.y0,
+    xInicio: formValue.xInicio,
+    xFin: formValue.xFin,
+    paso: formValue.paso,
+    mostrarExacta: formValue.mostrarExacta,
+    // Asegurar que este campo se envía SOLO cuando es necesario
+    solucionExacta: formValue.mostrarExacta ? formValue.solucionExacta : null
+  };
 
     if (euler.xFin <= euler.xInicio) {
       alert('El valor final debe ser mayor que el inicial');
@@ -70,7 +72,7 @@ export class EulerComponent implements OnInit {
       response => {
         this.resultados = response.resultados;
         this.grafica = 'data:image/png;base64,' + response.grafica;
-        
+
         if (response.errorMaximo !== undefined) {
           this.errorMaximo = response.errorMaximo;
           this.errorPromedio = response.errorPromedio;

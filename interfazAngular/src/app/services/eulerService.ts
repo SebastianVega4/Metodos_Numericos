@@ -16,7 +16,7 @@ export class EulerService {
     return this.http.post(this.url, euler).pipe(
       catchError((error: HttpErrorResponse) => {
         let errorMessage = 'Ocurrió un error al procesar la solicitud';
-        
+
         if (error.error?.error) {
           errorMessage = this.parseErrorMessage(error.error.error);
         } else if (error.status === 0) {
@@ -26,7 +26,7 @@ export class EulerService {
         } else if (error.status === 500) {
           errorMessage = 'Error interno del servidor';
         }
-        
+
         return throwError(() => new Error(errorMessage));
       })
     );
@@ -34,12 +34,14 @@ export class EulerService {
 
   private parseErrorMessage(error: string): string {
     if (error.includes('Término no permitido')) {
-      return 'Expresión matemática contiene términos no permitidos: ' + error.split(':').pop();
+      return `Expresión inválida: ${error.split(':')[1]?.trim() || error}`;
     } else if (error.includes('División por cero')) {
-      return 'División por cero detectada en la función';
-    } else if (error.includes('Error de sintaxis')) {
-      return 'Error de sintaxis en la expresión matemática: ' + error.split(':').pop();
+      return 'División por cero en la función';
+    } else if (error.includes('Datos incompletos')) {
+      return 'Faltan parámetros requeridos';
+    } else if (error.includes('Error durante la ejecución')) {
+      return 'Error interno del servidor';
     }
-    return error;
+    return `Error: ${error}`;
   }
 }
