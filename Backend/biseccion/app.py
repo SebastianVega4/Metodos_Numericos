@@ -16,6 +16,8 @@ def validate_expression(expr):
                        'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh',
                        'exp', 'log', 'log10', 'sqrt', 'pi', 'e'])
     
+    normalized_expr = expr.replace('Math.', 'math.')
+
     pattern = r'\b[a-zA-Z_][a-zA-Z0-9_]*\b'
     for match in re.finditer(pattern, expr):
         word = match.group()
@@ -101,6 +103,8 @@ def solve_biseccion():
         if a == b:
             return jsonify({'error': 'Los puntos x0 y x1 deben ser diferentes.'}), 400
             
+        f_str_normalized = f_str.replace('Math.', 'math.')
+        
         # Validar expresión matemática
         validate_expression(f_str)
         

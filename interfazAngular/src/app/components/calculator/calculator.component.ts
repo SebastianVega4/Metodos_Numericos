@@ -24,7 +24,7 @@ export class CalculatorComponent implements AfterViewChecked {
     const input = this.displayBox.nativeElement;
     const maxWidth = parseInt(getComputedStyle(input).width);
     const textWidth = this.getTextWidth(this.operationString, getComputedStyle(input).font);
-    
+
     if (textWidth > maxWidth * 1.5) {
       input.classList.add('smaller-font');
       input.classList.remove('small-font');
@@ -34,7 +34,7 @@ export class CalculatorComponent implements AfterViewChecked {
     } else {
       input.classList.remove('small-font', 'smaller-font');
     }
-    
+
     // Asegurar que el texto visible incluya la posición del cursor
     this.scrollToCursor();
   }
@@ -62,14 +62,14 @@ export class CalculatorComponent implements AfterViewChecked {
     const x = event.clientX - rect.left + input.scrollLeft;
     let pos = 0;
     let width = 0;
-    
+
     for (let i = 0; i < this.operationString.length; i++) {
       const charWidth = this.getTextWidth(this.operationString[i], getComputedStyle(input).font);
       width += charWidth;
       if (width > x) break;
       pos++;
     }
-    
+
     this.cursorPosition = pos;
     setTimeout(() => {
       input.setSelectionRange(pos, pos);
@@ -79,7 +79,7 @@ export class CalculatorComponent implements AfterViewChecked {
 
   handleKeyDown(event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
-    
+
     // Permitir navegación con teclado
     if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
       setTimeout(() => {
@@ -88,32 +88,32 @@ export class CalculatorComponent implements AfterViewChecked {
       }, 0);
       return;
     }
-    
+
     // Manejar edición en posición del cursor
     if (event.key.length === 1 || event.key === 'Backspace' || event.key === 'Delete') {
       event.preventDefault();
-      
+
       if (event.key === 'Backspace') {
         if (this.cursorPosition > 0) {
-          this.operationString = 
-            this.operationString.substring(0, this.cursorPosition - 1) + 
+          this.operationString =
+            this.operationString.substring(0, this.cursorPosition - 1) +
             this.operationString.substring(this.cursorPosition);
           this.cursorPosition--;
         }
       } else if (event.key === 'Delete') {
         if (this.cursorPosition < this.operationString.length) {
-          this.operationString = 
-            this.operationString.substring(0, this.cursorPosition) + 
+          this.operationString =
+            this.operationString.substring(0, this.cursorPosition) +
             this.operationString.substring(this.cursorPosition + 1);
         }
       } else {
-        this.operationString = 
-          this.operationString.substring(0, this.cursorPosition) + 
-          event.key + 
+        this.operationString =
+          this.operationString.substring(0, this.cursorPosition) +
+          event.key +
           this.operationString.substring(this.cursorPosition);
         this.cursorPosition++;
       }
-      
+
       // Actualizar la posición del cursor en el input
       setTimeout(() => {
         input.setSelectionRange(this.cursorPosition, this.cursorPosition);
@@ -123,12 +123,12 @@ export class CalculatorComponent implements AfterViewChecked {
   }
 
   writeToDisplay(value: string) {
-    this.operationString = 
-      this.operationString.substring(0, this.cursorPosition) + 
-      value + 
+    this.operationString =
+      this.operationString.substring(0, this.cursorPosition) +
+      value +
       this.operationString.substring(this.cursorPosition);
     this.cursorPosition += value.length;
-    
+
     // Enfocar y posicionar el cursor
     setTimeout(() => {
       this.displayBox.nativeElement.focus();
@@ -139,13 +139,13 @@ export class CalculatorComponent implements AfterViewChecked {
 
   writeMathFunction(data: string) {
     let transformedData = data;
-    
+
     switch(data) {
-      case 'sin(': transformedData = 'Math.sin('; break;
-      case 'cos(': transformedData = 'Math.cos('; break;
-      case 'tan(': transformedData = 'Math.tan('; break;
-      case 'sqrt(': transformedData = 'Math.sqrt('; break;
-      case 'log(': transformedData = 'Math.log10('; break;
+      case 'sin(': transformedData = 'sin('; break;
+      case 'cos(': transformedData = 'cos('; break;
+      case 'tan(': transformedData = 'tan('; break;
+      case 'sqrt(': transformedData = 'sqrt('; break;
+      case 'log(': transformedData = 'log10('; break;
       case 'ln(': transformedData = 'Math.log('; break;
       case '10^x': transformedData = 'Math.pow(10,'; break;
       case 'x^2': transformedData = '**2'; break;
@@ -155,13 +155,13 @@ export class CalculatorComponent implements AfterViewChecked {
       case 'PI': transformedData = 'Math.PI'; break;
       case '!': transformedData = '!'; break;
     }
-    
+
     this.writeToDisplay(transformedData);
   }
 
   writeOperatorToDisplay(operator: string) {
     // Reemplazar operador si el último carácter es un operador
-    if (this.operationString.length > 0 && 
+    if (this.operationString.length > 0 &&
         this.basicOperationShape.test(this.operationString[this.operationString.length - 1])) {
       this.operationString = this.operationString.slice(0, -1) + operator;
       if (this.cursorPosition === this.operationString.length + 1) {
@@ -199,21 +199,23 @@ export class CalculatorComponent implements AfterViewChecked {
   }
 
   passOperationString() {
-    try {
-      // Reemplazar Math por math para compatibilidad
-      const expression = this.operationString.replace(/Math\./g, 'math.');
-      const result = new Function('math', `return ${expression}`)(Math);
-      this.save.emit(result.toString());
-    } catch (e) {
-      this.save.emit('Error');
-    }
-    this.close.emit();
+  try {
+    // Reemplazar Math por math para compatibilidad con Python
+    const expression = this.operationString.replace(/Math\./g, 'math.');
+    const result = new Function('math', `return ${expression}`)(Math);
+    this.save.emit(result.toString());
+  } catch (e) {
+    this.save.emit('Error');
   }
+  this.close.emit();
+}
 
-  saveFunctionString() {
-    this.save.emit(this.operationString);
-    this.close.emit();
-  }
+saveFunctionString() {
+  // También aplicar el reemplazo al guardar la función
+  const expression = this.operationString.replace(/Math\./g, 'math.');
+  this.save.emit(expression);
+  this.close.emit();
+}
 
   // Funciones de memoria
   clearMemory() {
