@@ -41,8 +41,8 @@ export class BiseccionComponent implements OnInit {
 
     // Validar que la función sea una expresión válida
     try {
-      const testFunc = new Function('x', 'return ' + this.eventForm.get('funcion')?.value);
-      testFunc(1); // Test con un valor cualquiera
+      const testFunc = new Function('math', 'x', 'return ' + this.eventForm.get('funcion')?.value);
+      testFunc(Math, 1); // Pasar Math como parámetro
     } catch (e) {
       let errorMessage = 'Error en la función: ';
       if (e instanceof Error) {

@@ -16,10 +16,14 @@ def validate_expression(expr):
                        'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh',
                        'exp', 'log', 'log10', 'sqrt', 'pi', 'e'])
     
+    # Permitir prefijo 'math.' explícitamente
+    normalized_expr = expr.replace('Math.', 'math.')
+    normalized_expr = re.sub(r'math\.', '', normalized_expr)  # Remover prefijo para validación
+
     pattern = r'\b[a-zA-Z_][a-zA-Z0-9_]*\b'
-    for match in re.finditer(pattern, expr):
+    for match in re.finditer(pattern, normalized_expr):
         word = match.group()
-        if word not in allowed_funcs and word not in ['x', 'y']:
+        if word not in allowed_funcs and word != 'x':
             raise ValueError(f"Término no permitido en la expresión: '{word}'")
 
 def metodo_euler(f, x0, y0, x_inicio, x_fin, h, sol_exacta=None):

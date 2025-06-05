@@ -12,14 +12,16 @@ CORS(app)
 
 def validate_expression(expr):
     """Valida que la expresión matemática sea segura y válida."""
-    # Lista de funciones matemáticas permitidas
     allowed_funcs = set(['sin', 'cos', 'tan', 'asin', 'acos', 'atan', 
-                        'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh',
-                        'exp', 'log', 'log10', 'sqrt', 'pi', 'e'])
+                       'sinh', 'cosh', 'tanh', 'asinh', 'acosh', 'atanh',
+                       'exp', 'log', 'log10', 'sqrt', 'pi', 'e'])
     
-    # Buscar nombres de funciones/variables no permitidas
+    # Permitir prefijo 'math.' explícitamente
+    normalized_expr = expr.replace('Math.', 'math.')
+    normalized_expr = re.sub(r'math\.', '', normalized_expr)  # Remover prefijo para validación
+
     pattern = r'\b[a-zA-Z_][a-zA-Z0-9_]*\b'
-    for match in re.finditer(pattern, expr):
+    for match in re.finditer(pattern, normalized_expr):
         word = match.group()
         if word not in allowed_funcs and word != 'x':
             raise ValueError(f"Término no permitido en la expresión: '{word}'")

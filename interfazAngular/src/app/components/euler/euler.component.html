@@ -37,7 +37,7 @@
             </label>
             <div class="input-group">
               <input type="text" formControlName="funcion" class="form-control form-control-lg" 
-                     placeholder="Ej: 2*x - 3*y + 1" readonly>
+                     placeholder="Ej: 2*x - 3*y + 1">
               <button type="button" class="btn btn-secondary" (click)="openCalculator('funcion')">🧮</button>
             </div>
             <div class="text-danger" *ngIf="eventForm.get('funcion')?.hasError('required') && eventForm.get('funcion')?.touched">

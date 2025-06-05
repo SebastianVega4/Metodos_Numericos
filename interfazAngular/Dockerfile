@@ -1,32 +1,35 @@
-# Stage 1: Build
-FROM node:18-alpine as builder
+# Usa una imagen base de Node.js específica (versión 18.x.x LTS Alpine)
+FROM node:18-alpine as build
 
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /usr/src/app
 
-# Instalar dependencias de construcción (incluyendo Angular CLI)
-RUN npm install -g @angular/cli@16
+# Copia el archivo package.json y el archivo de lock de npm
+COPY package*.json ./
 
-# Copiar y instalar dependencias del proyecto
-COPY package.json package-lock.json ./
-RUN npm ci
+# Instala las dependencias del proyectoMore actions
+RUN npm install
 
-# Copiar el resto de archivos y construir
+# Instala @angular/cli globalmente
+RUN npm install -g @angular/cli
+
+# Copia todos los archivos del proyecto al directorio de trabajo en el contenedor
 COPY . .
-RUN ng build --configuration production
 
-# Stage 2: Serve
-FROM nginx:1.25-alpine
+# Construye la aplicación Angular para producción
+RUN npm run build -- --output-path=dist
 
-# Configurar Nginx
-RUN rm -rf /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
+# Usa una imagen base de Nginx (versión Alpine) para servir la aplicación
+FROM nginx:alpine
 
-# Copiar los archivos construidos
-COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
+# Copia el archivo de configuración de Nginx
+COPY nginx.conf /etc/nginx/nginx.conf
 
-# Exponer puerto y healthcheck
-EXPOSE 80
-HEALTHCHECK --interval=30s --timeout=3s \
-    CMD wget --no-verbose --tries=1 --spider http://localhost:80 || exit 1
+# Copia los archivos construidos de Angular desde el contenedor de Node.js al directorio de Nginx
+COPY --from=build /usr/src/app/dist /usr/share/nginx/html
 
+# Expone el puerto 5009 para el servidor web
+EXPOSE 5000
+
+# Inicia Nginx cuando se ejecute el contenedor
 CMD ["nginx", "-g", "daemon off;"]

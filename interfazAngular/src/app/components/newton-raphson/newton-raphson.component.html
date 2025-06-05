@@ -51,7 +51,7 @@
                   </label>
 
                   <div class="input-group">
-                    <input type="text" formControlName="derivada" class="form-control form-control-lg" placeholder="Derivada de la función" readonly>
+                    <input type="text" formControlName="derivada" class="form-control form-control-lg" placeholder="Derivada de la función">
                     <button type="button" class="btn btn-secondary" (click)="openCalculator('derivada')">🧮</button>
                   </div>
               <div class="text-danger" *ngIf="eventForm.get('derivada')?.hasError('required') && eventForm.get('derivada')?.touched">

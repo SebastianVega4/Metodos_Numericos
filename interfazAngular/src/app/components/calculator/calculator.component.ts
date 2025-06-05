@@ -141,20 +141,20 @@ export class CalculatorComponent implements AfterViewChecked {
     let transformedData = data;
 
     switch(data) {
-      case 'sin(': transformedData = 'sin('; break;
-      case 'cos(': transformedData = 'cos('; break;
-      case 'tan(': transformedData = 'tan('; break;
-      case 'sqrt(': transformedData = 'sqrt('; break;
-      case 'log(': transformedData = 'log10('; break;
-      case 'ln(': transformedData = 'Math.log('; break;
-      case '10^x': transformedData = 'Math.pow(10,'; break;
-      case 'x^2': transformedData = '**2'; break;
-      case 'x^3': transformedData = '**3'; break;
-      case 'x^-1': transformedData = '**-1'; break;
-      case 'e': transformedData = 'Math.E'; break;
-      case 'PI': transformedData = 'Math.PI'; break;
-      case '!': transformedData = '!'; break;
-    }
+    case 'sin(': transformedData = 'math.sin('; break;
+    case 'cos(': transformedData = 'math.cos('; break;
+    case 'tan(': transformedData = 'math.tan('; break;
+    case 'sqrt(': transformedData = 'math.sqrt('; break;
+    case 'log(': transformedData = 'math.log10('; break;
+    case 'ln(': transformedData = 'math.log('; break;
+    case '10^x': transformedData = 'math.pow(10,'; break;
+    case 'x^2': transformedData = '**2'; break;
+    case 'x^3': transformedData = '**3'; break;
+    case 'x^-1': transformedData = '**-1'; break;
+    case 'e': transformedData = 'math.e'; break;
+    case 'PI': transformedData = 'math.pi'; break;
+    case '!': transformedData = '!'; break;
+  }
 
     this.writeToDisplay(transformedData);
   }

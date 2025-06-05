@@ -29,7 +29,7 @@
             </label>
 
             <div class="input-group">
-              <input type="text" formControlName="funcion" class="form-control form-control-lg" placeholder="Funcion Despeje" readonly>
+              <input type="text" formControlName="funcion" class="form-control form-control-lg" placeholder="Funcion Despeje">
               <button type="button" class="btn btn-secondary" (click)="openCalculator('funcion')">🧮</button>
             </div>
             <div class="text-danger" *ngIf="eventForm.get('funcion')?.hasError('invalidExpression')">
