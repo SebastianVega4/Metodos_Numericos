@@ -1,4 +1,5 @@
 flask==3.0.2
 flask-cors==4.0.0
 numpy==1.26.4
-matplotlib==3.8.2
+matplotlib==3.8.3  # Versión más nueva que soporta Python 3.11
+pillow==10.3.0     # Añade explícitamente una versión compatible
