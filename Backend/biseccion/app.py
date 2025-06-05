@@ -18,7 +18,7 @@ def validate_expression(expr):
     
     # Permitir prefijo 'math.' explícitamente
     normalized_expr = expr.replace('Math.', 'math.')
-    normalized_expr = re.sub(r'math\.', '', normalized_expr)  # Remover prefijo para validación
+    normalized_expr = re.sub(r'math\.', '', normalized_expr)
 
     pattern = r'\b[a-zA-Z_][a-zA-Z0-9_]*\b'
     for match in re.finditer(pattern, normalized_expr):
@@ -26,16 +26,36 @@ def validate_expression(expr):
         if word not in allowed_funcs and word != 'x':
             raise ValueError(f"Término no permitido en la expresión: '{word}'")
 
+def detectar_raices(f, a, b):
+    """Detecta si hay múltiples raíces en el intervalo."""
+    puntos = np.linspace(a, b, 100)
+    cambios_signo = 0
+    
+    # Evaluar función en todos los puntos
+    f_vals = [f(x) for x in puntos]
+    
+    # Contar cambios de signo
+    for i in range(1, len(f_vals)):
+        if f_vals[i-1] * f_vals[i] < 0:
+            cambios_signo += 1
+            
+    return cambios_signo
+
 def biseccion(f, a, b, error=1e-6):
     maxima_Iteracion = 100
     iteraciones = []
 
     # Verificar condición inicial del método
     if f(a) * f(b) >= 0:
-        raise ValueError("La función debe tener signos opuestos en los extremos del intervalo (f(a)*f(b) < 0) \n"
-        "No hay raíces en el intervalo"
-        "Hay un número par de raíces (pero el método no puede encontrarlas)"
-        "Hay una discontinuidad en la función")
+        # Detectar número de raíces en el intervalo
+        num_raices = detectar_raices(f, a, b)
+        
+        if num_raices >= 2:
+            raise ValueError(f"¡Hay al menos {num_raices} raíces en este intervalo! "
+                             "El método de bisección solo puede encontrar una. "
+                             "Por favor, reduzca el intervalo.")
+        else:
+            raise ValueError("La función debe tener signos opuestos en los extremos del intervalo (f(a)*f(b) < 0)")
 
     for i in range(maxima_Iteracion):
         try:
@@ -72,8 +92,12 @@ def generar_grafica(f, a, b, raiz):
         ax.plot(x, y, label='f(x)')
         ax.axhline(0, color='red', lw=0.5)
         ax.axvline(0, color='red', lw=0.5)
-        ax.plot(raiz, 0, 'ro')
-        ax.axvline(raiz, color='green', linestyle='--', lw=0.5)
+        ax.plot(raiz, 0, 'ro', label='Raíz encontrada')
+        
+        # Marcar posibles raíces adicionales
+        for x_val in np.linspace(a, b, 50):
+            if abs(f(x_val)) < 0.5:  # Umbral para detectar cercanía al eje X
+                ax.plot(x_val, 0, 'go', alpha=0.3)
         
         ax.set_title("Método de Bisección")
         ax.set_xlabel("Eje X")
@@ -114,7 +138,7 @@ def solve_biseccion():
         validate_expression(f_str)
         
         # Crear función
-        f = lambda x: eval(f_str, {"math": math, "x": x, "__builtins__": {}})
+        f = lambda x: eval(f_str, {"math": math, "x": x, "__builtins__": None})
         
         # Verificar que la función es válida
         f(a)
@@ -124,7 +148,12 @@ def solve_biseccion():
         root, iteraciones = biseccion(f, a, b)
         imagen = generar_grafica(f, a, b, root)
         
-        return jsonify({'Raiz': root, 'Iteraciones': iteraciones, 'Imagen': imagen})
+        return jsonify({
+            'Raiz': root, 
+            'Iteraciones': iteraciones, 
+            'Imagen': imagen,
+            'Mensaje': '¡Raíz encontrada con éxito!'
+        })
         
     except ValueError as e:
         return jsonify({'error': str(e)}), 400
