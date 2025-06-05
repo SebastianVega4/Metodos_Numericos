@@ -1,109 +1,97 @@
-services:
 
+services:
+  # Servicios backend (configuración común)
   punto_fijo:
-    build: 
-      context: ./Backend/punto_fijo
-    #  network: host
+    build: ./Backend/punto_fijo
     ports:
       - "5001:5001"
-    #dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   biseccion:
-    build: 
-      context: ./Backend/biseccion
-    #  network: host
+    build: ./Backend/biseccion
     ports:
       - "5002:5002"
-    #dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   newton_raphson:
-    build: 
-      context: ./Backend/newton_raphson
-    #  network: host
+    build: ./Backend/newton_raphson
     ports:
       - "5003:5003"
-    #dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   secante:
-    build: 
-      context: ./Backend/secante
-    #  network: host
+    build: ./Backend/secante
     ports:
       - "5004:5004"
-    #dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   jacobi:
-    build: 
-      context: ./Backend/jacobi
-    #  network: host
+    build: ./Backend/jacobi
     ports:
       - "5005:5005"
-    #dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   gauss_seidel:
-    build: 
-      context: ./Backend/gauss_seidel
-    #  network: host
+    build: ./Backend/gauss_seidel
     ports:
       - "5006:5006"
-    #dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   trapecio:
-    build: 
-      context: ./Backend/trapecio
-    #  network: host
+    build: ./Backend/trapecio
     ports:
       - "5007:5007"
-    #dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   simpson:
-    build: 
-      context: ./Backend/simpson
-    # network: host
+    build: ./Backend/simpson
     ports:
       - "5008:5008"
-    # dns:
-    #  - 8.8.8.8
-    #  - 1.1.1.1
-    #network_mode: bridge
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
   euler:
-    build: 
-      context: ./Backend/euler  # <-- VERIFICAR RUTA CORRECTA
-      # network: host  # <-- ELIMINAR ESTA LÍNEA
+    build: ./Backend/euler
     ports:
-      - "5009:5009"  # <-- ASEGURAR QUE COINCIDEN PUERTOS
-    # dns:  # <-- OPCIONAL: ELIMINAR SI NO ES NECESARIO
-    #   - 8.8.8.8
-    #   - 1.1.1.1
-    # network_mode: bridge  # <-- ELIMINAR (USAR RED POR DEFECTO)
+      - "5009:5009"
+    networks:
+      - mynetwork
+    restart: unless-stopped
 
+  # Frontend Angular (configuración corregida)
   angular-app:
-    build:
-      context: ./interfazAngular
-    #  dockerfile: Dockerfile
-    #  network: host
+    build: ./interfazAngular
     ports:
-      - "5000:80"
-    #network_mode: bridge
+      - "5000:80"  # Mapeo correcto para acceso desde navegador
+    networks:
+      - mynetwork
+    restart: unless-stopped
+    depends_on:
+      - punto_fijo
+      - biseccion
+      - newton_raphson
+      - secante
+      - jacobi
+      - gauss_seidel
+      - trapecio
+      - simpson
+      - euler
+
+networks:
+  mynetwork:
+    driver: bridge
