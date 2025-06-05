@@ -55,7 +55,8 @@ def biseccion(f, a, b, error=1e-6):
                              "El método de bisección solo puede encontrar una. "
                              "Por favor, reduzca el intervalo.")
         else:
-            raise ValueError("La función debe tener signos opuestos en los extremos del intervalo (f(a)*f(b) < 0)")
+            raise ValueError("La función debe tener signos opuestos en los extremos del intervalo (f(a)*f(b) < 0)"
+            "(la función no cruza el eje X)")
 
     for i in range(maxima_Iteracion):
         try:
