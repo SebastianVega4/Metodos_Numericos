@@ -104,8 +104,8 @@ con el objetivo de integrar teoría matemática, programación y despliegue mode
 1. Clonar el repositorio:
 
 ```bash
-git clone https://github.com/usuario/repositorio-metodos-numericos.git
-cd repositorio-metodos-numericos
+git clone https://github.com/SebastianVega4/metodos-numericos.git
+cd metodos-numericos
 ```
 
 2. Levantar los contenedores con Docker Compose:
@@ -123,7 +123,7 @@ OR
 
 1. Clona el repositorio:
 ```bash
-git clone https://github.com/usuario/repositorio-metodos-numericos.git
+git clone https://github.com/SebastianVega4/metodos-numericos.git
 ```
 
 2. Instala las dependencias:
@@ -141,6 +141,13 @@ Todos los servicios se levantarán automáticamente según el archivo `docker-co
 ## 📄 Licencia
 
 Este proyecto está licenciado bajo la **MIT License**. Puedes utilizarlo, modificarlo y distribuirlo libremente bajo los términos establecidos en el archivo `LICENSE`.
+Este repositorio se encuentra bajo la Licencia GPL 3.0.
+
+**Permisos:**
+- Uso comercial
+- Modificación
+- Distribución
+- Uso privado
 
 ## 👨‍🎓 Autor
 
